@@ -1,0 +1,50 @@
+﻿@model GradeTracker.ViewModels.StudentGradeViewModel
+
+<h1>Grades for @Model.Name</h1>
+<p>Email: @Model.Email</p>
+
+@if (TempData["Error"] != null)
+{
+    <p style="color:red">@TempData["Error"]</p>
+}
+
+<form method="post" action="/Grade/Create">
+    <input type="hidden" name="studentId" value="@Model.Id" />
+    <input type="text" name="subject" placeholder="Subject" />
+    <input type="number" name="score" placeholder="Score (0-100)" min="0" max="100" />
+    <button type="submit">Add Grade</button>
+</form>
+
+<h2>Grade List</h2>
+@if (Model.Grades.Count == 0)
+{
+    <p>No grades yet.</p>
+}
+else
+{
+    <table>
+        <tr>
+            <th>Subject</th>
+            <th>Score</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var grade in Model.Grades)
+        {
+            <tr>
+                <td>@grade.Subject</td>
+                <td>@grade.Score</td>
+                <td>@grade.Score — @grade.LetterGrade</td>
+                <td>
+                    <form method="post" action="/Grade/Delete/@grade.Id">
+                        <input type="hidden" name="studentId" value="@Model.Id" />
+                        <button type="submit">❌ Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <p><strong>Average: @Model.Grades.Average(g => g.Score).ToString("0.00")</strong></p>
+}
+
+<a href="/Student">Back to Students</a>

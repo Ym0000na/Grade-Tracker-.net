@@ -1,0 +1,25 @@
+﻿@model List<GradeTracker.Models.Student>
+
+<h1>Students</h1>
+<a href="/Student/Create">+ Add New Student</a>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var student in Model)
+    {
+        <tr>
+            <td>@student.Name</td>
+            <td>@student.Email</td>
+            <td>
+                <a href="/Grade/Index?studentId=@student.Id">📊 Grades</a>
+                <form method="post" action="/Student/Delete/@student.Id" style="display:inline">
+                    <button type="submit">❌ Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+</table>
